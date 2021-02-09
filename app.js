@@ -18,7 +18,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useUnifiedTopology: true
 }).then(()=> console.log("DB connected"));
 
 //middlewares
@@ -33,6 +34,11 @@ app.use(authEmployeeRoute);
 app.use(userRoute);
 app.use(employeeRoute);
 
+app.use('*', (req, res)=>{
+    res.status(404).json({
+        error: "Route Not Found"
+    })
+});
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
